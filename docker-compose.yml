@@ -1,0 +1,39 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nena-ai-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=Nena AI API
+      - APP_ENV=development
+      - API_V1_PREFIX=/api/v1
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost:80
+      - SUPABASE_URL=${SUPABASE_URL:-https://nena-ai-demo.supabase.co}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY:-synthetic-anon-key}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY:-synthetic-service-role-key}
+      - APP_HMAC_SECRET=${APP_HMAC_SECRET:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      - MPESA_CALLBACK_SECRET=${MPESA_CALLBACK_SECRET:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      - MPESA_MODE=mock
+      - MOCK_MPESA_LATENCY_MS=0
+      - MOCK_MPESA_FAILURE_RATE=0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nena-ai-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

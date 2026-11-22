@@ -1,0 +1,15 @@
+{
+  "name": "Nena AI — Healthcare Subsidy Routing",
+  "short_name": "Nena AI",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#0A3D91",
+  "icons": [
+    {
+      "src": "/nena-ai-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}
