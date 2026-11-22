@@ -1,6 +1,7 @@
 import type { EncounterCreate, EncounterResponse, ProgramRule, LedgerChainVerifyResponse } from '../types';
 
-const BASE_URL = '/api/v1';
+const API_HOST = import.meta.env.VITE_API_URL || '';
+const BASE_URL = `${API_HOST}/api/v1`;
 
 // Client-side HS256 mock JWT generator for seamless instant demo role-switching
 function createClientDemoToken(userId: string, email: string): string {

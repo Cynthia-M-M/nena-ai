@@ -1,0 +1,54 @@
+services:
+  # Nena AI FastAPI Backend Web Service
+  - type: web
+    name: nena-ai-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: APP_NAME
+        value: Nena AI API
+      - key: APP_ENV
+        value: production
+      - key: API_V1_PREFIX
+        value: /api/v1
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: APP_HMAC_SECRET
+        generateValue: true
+      - key: MPESA_CALLBACK_SECRET
+        generateValue: true
+      - key: MPESA_MODE
+        value: mock
+      - key: MOCK_MPESA_LATENCY_MS
+        value: "350"
+      - key: MOCK_MPESA_FAILURE_RATE
+        value: "0.0"
+
+  # Nena AI React PWA Frontend Static Site
+  - type: web
+    name: nena-ai-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: nena-ai-backend
+          type: web
+          property: host
