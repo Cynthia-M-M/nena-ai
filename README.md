@@ -26,7 +26,7 @@ Nena AI connects independent primary healthcare clinics directly with institutio
 
 ---
 
-## 2. Four-Stage Zero-Trust Verification Engine
+## 2.1 Four-Stage Zero-Trust Verification Engine
 
 Every claim must pass through all four stages before financial authorization:
 
